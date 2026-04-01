@@ -15,10 +15,5 @@ extension type Money (int inPennies) {
 }
 
 extension ListMoneyUtils on Iterable<Money> {
-  Money get total => Money(
-    [
-      for (final m in this)
-        m.inPennies,
-    ].sum,
-  );
+  Money get total => Money(map((m) => m.inPennies).sum);
 }

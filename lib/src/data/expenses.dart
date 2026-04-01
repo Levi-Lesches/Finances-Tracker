@@ -7,7 +7,7 @@ enum Interval {
 }
 
 class Expense {
-  Expense(this.name, this.amount, this.startDate, this.interval, this.allAtOnce);
+  Expense(this.name, this.amount, this.startDate, this.interval, {required this.allAtOnce});
   final String name;
   final Money amount;
   final Interval interval;
@@ -25,8 +25,5 @@ class Expense {
 }
 
 extension ExpensesIterableUtils on Iterable<Expense> {
-  Money get monthlyExpenses => [
-    for (final expense in this)
-      expense.monthlyAmount,
-  ].total;
+  Money get monthlyExpenses => map((e) => e.monthlyAmount).total;
 }
