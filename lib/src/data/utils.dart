@@ -1,6 +1,13 @@
 /// A JSON object
 typedef Json = Map<String, dynamic>;
 
+extension JsonUtils on Json {
+  List<T> parseList<T>(String key, T Function(Json) fromJson) => [
+    for (final element in (this[key] as List).cast<Json>())
+      fromJson(element),
+  ];
+}
+
 /// Utils on [Map].
 extension MapUtils<K, V> on Map<K, V> {
   /// Gets all the keys and values as 2-element records.

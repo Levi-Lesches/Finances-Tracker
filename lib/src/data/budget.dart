@@ -1,28 +1,17 @@
+import "package:finances/services.dart";
+
 import "savings.dart";
 import "money.dart";
 
-import "expenses.dart";
+import "expense.dart";
 import "income.dart";
-
-class Payment {
-  final Money amount;
-  final Expense expense;
-  const Payment({
-    required this.expense,
-    required this.amount,
-  });
-}
-
-extension PaymentIterableUtils on Iterable<Payment> {
-  Money get total => map((payment) => payment.amount).total;
-}
+import "payment.dart";
 
 class Budget {
-  final Income _income;
-  final List<Expense> _expenses;
-  final List<Payment> payments = [];
-  final List<SavingsGoal> savingsGoals = [];
-  Budget(this._expenses, this._income);
+  Income get _income => services.database.income;
+  List<Expense> get _expenses => services.database.expenses;
+  List<Payment> get payments => services.database.payments;
+  List<SavingsGoal> get savingsGoals => services.database.goals;
 
   Money wallet = Money(0);
 
@@ -58,7 +47,7 @@ class Budget {
   Map<Expense, Money> get budgetBreakdown => {
     for (final expense in _expenses)
       expense: payments
-        .where((payment) => payment.expense == expense)
+        .where((payment) => payment.expenseID == expense.id)
         .map((payment) => payment.amount)
         .total,
   };
@@ -67,6 +56,4 @@ class Budget {
     final moneyRemaining = goal.goal - goal.progress;
     return estimatedSavings.inPennies / moneyRemaining.inPennies;
   }
-
-
 }

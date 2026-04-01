@@ -1,4 +1,5 @@
 import "money.dart";
+import "utils.dart";
 
 class SavingsGoal {
   final String name;
@@ -19,4 +20,13 @@ class SavingsGoal {
       return Money(0);
     }
   }
+
+  SavingsGoal.fromJson(Json json) :
+    name = json["name"],
+    goal = Money.fromJson(json["goal"]);
+
+  Json toJson() => {
+    "name": name,
+    "goal": goal,
+  };
 }

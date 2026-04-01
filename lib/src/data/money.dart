@@ -12,6 +12,9 @@ extension type Money (int inPennies) {
 
   bool get isPositive => inPennies >= 0;
   bool get isNegative => inPennies < 0;
+
+  int toJson() => inPennies;
+  Money.fromJson(this.inPennies);
 }
 
 extension ListMoneyUtils on Iterable<Money> {

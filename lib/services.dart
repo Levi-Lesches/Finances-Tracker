@@ -1,7 +1,10 @@
 /// Defines and manages the different services used by the app.
 library;
 
-import "src/services/service.dart";
+import "";
+
+export "src/services/service.dart";
+export "src/services/database.dart";
 
 /// A [Service] that manages all other services used by the app.
 class Services extends Service {
@@ -9,21 +12,15 @@ class Services extends Service {
 	Services._();
 
   // Define your services here
+  final database = DatabaseService();
 
 	/// The different services to initialize, in this order.
-	List<Service> get services => [];
+	List<Service> get services => [database];
 
 	@override
 	Future<void> init() async {
 		for (final service in services) {
       await service.init();
-    }
-	}
-
-	@override
-	Future<void> dispose() async {
-		for (final service in services) {
-      await service.dispose();
     }
 	}
 }
