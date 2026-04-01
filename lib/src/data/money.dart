@@ -15,6 +15,12 @@ extension type Money (int inPennies) {
 
   int toJson() => inPennies;
   Money.fromJson(this.inPennies);
+
+  static Money? tryParse(String text) {
+    final dollars = int.tryParse(text);
+    if (dollars == null) return null;
+    return Money(dollars * 100);
+  }
 }
 
 extension ListMoneyUtils on Iterable<Money> {

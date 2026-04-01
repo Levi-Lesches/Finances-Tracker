@@ -2,15 +2,19 @@ import "dart:convert";
 import "dart:io";
 
 import "package:finances/data.dart";
+import "package:path_provider/path_provider.dart";
 
 import "service.dart";
 
 class DatabaseService extends Service {
   late final Directory dir;
   File get file => File("${dir.path}/data.json");
+  bool get needsOnboarding => file.existsSync();
 
   @override
   Future<void> init() async {
+    dir = await getApplicationSupportDirectory();
+    if (!file.existsSync()) return;
     final jsonString = await file.readAsString();
     final json = jsonDecode(jsonString) as Json;
     income = Income.fromJson(json["income"]);
@@ -20,9 +24,9 @@ class DatabaseService extends Service {
   }
 
   late final Income income;
-  late final List<Expense> expenses;
-  late final List<Payment> payments;
-  late final List<SavingsGoal> goals;
+  List<Expense> expenses = [];
+  List<Payment> payments = [];
+  List<SavingsGoal> goals = [];
 
   Future<void> save() async {
     final json = {
@@ -31,6 +35,7 @@ class DatabaseService extends Service {
       "payments": payments,
       "goals": goals,
     };
+    await file.create(recursive: true);
     await file.writeAsString(jsonEncode(json));
   }
 }

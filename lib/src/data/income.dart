@@ -3,27 +3,27 @@ import "utils.dart";
 
 class Income {
   final Money annualSalary;
-  final Money annualTaxes;
+  final Money paycheck;
   final DateTime firstPayDay;
   Income({
     required this.annualSalary,
-    required this.annualTaxes,
+    required this.paycheck,
     required this.firstPayDay,
   });
 
-  Money get annualIncome => annualSalary - annualTaxes;
+  Money get annualTaxes => annualSalary - (paycheck * 26);
+  Money get annualIncome => paycheck * 26;
   Money get monthlyIncome => annualIncome / 12;
-  Money get paycheck => annualIncome / 26;
 
   Json toJson() => {
     "annualSalary": annualSalary.toJson(),
-    "annualTaxes": annualTaxes.toJson(),
+    "paycheck": paycheck.toJson(),
     "firstPayDay": firstPayDay.toIso8601String(),
   };
 
   Income.fromJson(Json json) :
     annualSalary = Money.fromJson(json["annualSalary"]),
-    annualTaxes = Money.fromJson(json["annualTaxes"]),
+    paycheck = Money.fromJson(json["paycheck"]),
     firstPayDay = DateTime.parse(json["firstPayDay"]);
 
   DateTime get nextPayday {
