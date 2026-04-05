@@ -63,17 +63,17 @@ final router = GoRouter(
         GoRoute(
           path: Routes.income,
           name: Routes.income,
-          builder: (context, state) => IncomePage(),
+          pageBuilder: (context, state) => NoTransitionPage(child: IncomePage()),
         ),
         GoRoute(
           path: Routes.expenses,
           name: Routes.expenses,
-          builder: (context, state) => ExpensesPage(),
+          pageBuilder: (context, state) => NoTransitionPage(child: ExpensesPage()),
         ),
         GoRoute(
           path: Routes.savings,
           name: Routes.savings,
-          builder: (context, state) => SavingsPage(),
+          pageBuilder: (context, state) => NoTransitionPage(child: SavingsPage()),
         ),
       ],
     ),
