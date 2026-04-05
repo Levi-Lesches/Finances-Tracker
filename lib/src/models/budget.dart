@@ -87,4 +87,13 @@ class Budget extends DataModel {
     isEditing = false;
     notifyListeners();
   }
+
+  void rollover() {
+    for (final expense in _expenses) {
+      expense.amountPaid = Money.zero;
+    }
+    services.database.save();
+    stopEditing();
+    notifyListeners();
+  }
 }

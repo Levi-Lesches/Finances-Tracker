@@ -43,6 +43,7 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
             icon: const Icon(Icons.add),
           ),
         ),
+        FilledButton(onPressed: model.rollover, child: const Text("Rollover")),
       ] else
         GridView.count(
           shrinkWrap: true,
