@@ -41,6 +41,7 @@ class ExpenseCard extends StatelessWidget {
             const Text("Hold to un-spend", style: TextStyle(fontStyle: .italic)),
             const Spacer(),
             Text("${currentSpending.format()} / ${expense.monthlyAmount.format()}"),
+            const SizedBox(height: 4),
             LinearProgressIndicator(value: currentSpending / expense.monthlyAmount),
           ],
         ),
