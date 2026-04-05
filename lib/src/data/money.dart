@@ -1,4 +1,5 @@
 import "package:collection/collection.dart";
+import "package:intl/intl.dart";
 
 extension type Money (int inPennies) {
   Money operator * (int n) => Money(inPennies * n);
@@ -8,7 +9,7 @@ extension type Money (int inPennies) {
   bool operator < (Money other) => inPennies < other.inPennies;
   bool operator > (Money other) => inPennies > other.inPennies;
 
-  String format() => "\$${inPennies / 100}";
+  String format() => "\$${NumberFormat.currency(name: "").format(inPennies / 100)}";
 
   bool get isPositive => inPennies >= 0;
   bool get isNegative => inPennies < 0;

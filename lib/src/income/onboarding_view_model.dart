@@ -1,4 +1,5 @@
 import "package:finances/data.dart";
+import "package:finances/pages.dart";
 import "package:finances/services.dart";
 import "package:finances/view_models.dart";
 import "package:flutter/widgets.dart";
@@ -15,7 +16,7 @@ class IncomeOnboardingViewModel extends ViewModel {
     notifyListeners();
   }
 
-  void submit() {
+  Future<void> submit() async {
     final paycheck = Money.tryParse(paycheckController.text);
     if (paycheck == null) {
       paycheckError = "Invalid amount";
@@ -33,6 +34,7 @@ class IncomeOnboardingViewModel extends ViewModel {
       paycheck: paycheck,
       firstPayDay: firstPayDay,
     );
-    services.database.save();
+    await services.database.save();
+    router.go(Routes.home);
   }
 }

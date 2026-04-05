@@ -1,6 +1,7 @@
-import "src/models/model.dart";
+import "";
 
 export "src/models/model.dart";
+export "src/models/budget.dart";
 
 /// A [DataModel] to manage all other data models.
 class Models extends DataModel {
@@ -8,9 +9,10 @@ class Models extends DataModel {
 	Models._();
 
   // List your models here
+  final budget = Budget();
 
 	/// A list of all models to manage.
-	List<DataModel> get models => [];
+	List<DataModel> get models => [budget];
 
 	@override
 	Future<void> init() async {

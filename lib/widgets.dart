@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
+import "package:intl/intl.dart";
 
 export "package:go_router/go_router.dart";
 
 export "src/widgets/generic/reactive_widget.dart";
+export "src/widgets/generic/money_input.dart";
 
 /// Helpful methods on [BuildContext].
 extension ContextUtils on BuildContext {
@@ -17,4 +19,6 @@ extension ContextUtils on BuildContext {
 
 	/// Formats a time according to the user's locale.
 	String formatTime(DateTime time) => MaterialLocalizations.of(this).formatTimeOfDay(TimeOfDay.fromDateTime(time));
+
+  String formatNumber(int number) => NumberFormat.currency().format(number);
 }
