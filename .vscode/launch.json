@@ -8,7 +8,6 @@
       "name": "finances",
       "request": "launch",
       "type": "dart",
-      "deviceId": "windows"
     },
   ]
 }

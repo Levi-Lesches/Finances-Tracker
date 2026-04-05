@@ -1,6 +1,5 @@
 import "package:finances/widgets.dart";
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
 
 import "onboarding_view_model.dart";
 
@@ -25,14 +24,7 @@ class IncomeOnboardingPage extends ReactiveWidget<IncomeOnboardingViewModel> {
             leading: CircleAvatar(child: Text("1")),
             title: Text("How much is your bi-weekly paycheck?"),
           ),
-          SizedBox(
-            width: 100,
-            child: TextField(
-              controller: model.paycheckController,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.attach_money)),
-            ),
-          ),
+          moneyInput(model.paycheckController),
           const SizedBox(height: 24),
           const ListTile(
             leading: CircleAvatar(child: Text("2")),
@@ -55,14 +47,7 @@ class IncomeOnboardingPage extends ReactiveWidget<IncomeOnboardingViewModel> {
             leading: CircleAvatar(child: Text("3")),
             title: Text("How much is your total salary?"),
           ),
-          SizedBox(
-            width: 100,
-            child: TextField(
-              controller: model.salaryController,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.attach_money)),
-            ),
-          ),
+          moneyInput(model.salaryController),
           const SizedBox(height: 48),
           FilledButton(child: const Text("Submit"), onPressed: () => model.submit()),
         ],

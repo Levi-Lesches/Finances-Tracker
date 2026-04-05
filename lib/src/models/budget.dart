@@ -6,13 +6,14 @@ import "model.dart";
 class Budget extends DataModel {
   Income get income => services.database.income;
   List<Expense> get _expenses => services.database.expenses;
-  // List<Payment> get payments => services.database.payments;
   List<SavingsGoal> get savingsGoals => services.database.goals;
 
   @override
-  Future<void> init() async {}
+  Future<void> init() async {
+    _wallet = services.database.wallet;
+  }
 
-  Money _wallet = services.database.wallet;
+  Money _wallet = Money.zero;
   Money get wallet => _wallet;
   set wallet(Money amount) {
     _wallet = amount;
@@ -95,5 +96,11 @@ class Budget extends DataModel {
     services.database.save();
     stopEditing();
     notifyListeners();
+  }
+
+  Future<void> import() async {
+    await services.database.import();
+    notifyListeners();
+    await init();
   }
 }

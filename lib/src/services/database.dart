@@ -8,7 +8,7 @@ import "package:file_picker/file_picker.dart";
 import "service.dart";
 
 class DatabaseService extends Service {
-  late final Directory dir;
+  late Directory dir;
   File get file => File("${dir.path}/data.json");
   bool get needsOnboarding => !file.existsSync();
 
@@ -41,26 +41,28 @@ class DatabaseService extends Service {
     await file.writeAsString(encoder.convert(json));
   }
 
-  Future<void> requestPermissions() async {
-    // await Permission.accessMediaLocation.request();
-    // await Permission.manageExternalStorage.request();
-    // await Permission.storage.request();
-  }
-
   Future<void> export() async {
-    await requestPermissions();
-    final result = await FilePicker.saveFile(
+    final bytes = await file.readAsBytes();
+    await FilePicker.platform.saveFile(
       dialogTitle: "Export data",
       type: FileType.custom,
       fileName: "finances.json",
       allowedExtensions: [".json"],
+      bytes: bytes,
     );
-    final xFile = result;
-    if (xFile == null) return;
-    final file = File(xFile);
+  }
 
-    await file.create(recursive: true);
-    final contents = await this.file.readAsString();
-    await file.writeAsString(contents);
+  Future<void> import() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowedExtensions: [".json"],
+      dialogTitle: "Import data",
+      type: .custom,
+      withData: true,
+    );
+    if (result == null || result.files.isEmpty) return;
+    final bytes = result.files.first.bytes;
+    if (bytes == null) return;
+    await file.writeAsBytes(bytes);
+    await init();
   }
 }

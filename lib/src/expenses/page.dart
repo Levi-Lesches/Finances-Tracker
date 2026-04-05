@@ -24,7 +24,8 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
         "${model.actualExpenses.format()} / ${model.estimatedExpenses.format()}",
         textAlign: .center,
       ),
-      LinearProgressIndicator(value: model.actualExpenses / model.estimatedExpenses),
+      if (model.estimatedExpenses > Money.zero)
+        LinearProgressIndicator(value: model.actualExpenses / model.estimatedExpenses),
       const SizedBox(height: 12),
       if (model.isEditing) ...[
         for (final expense in model.budgetBreakdown.keys)
@@ -36,6 +37,7 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
               icon: const Icon(Icons.edit),
             ),
           ),
+        const Divider(),
         ListTile(
           title: const Text("Add new expense"),
           trailing: IconButton(

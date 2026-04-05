@@ -15,6 +15,7 @@ Widget moneyInput(
     autofocus: autofocus,
     decoration: const InputDecoration(prefixIcon: Icon(Icons.attach_money)),
     onSubmitted: (_) => onDone?.call(),
+    keyboardType: .number,
   ),
 );
 

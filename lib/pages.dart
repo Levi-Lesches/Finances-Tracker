@@ -1,9 +1,11 @@
 import "package:finances/data.dart";
 import "package:finances/services.dart";
+import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 export "package:go_router/go_router.dart";
 
 import "src/pages/home.dart";
+import "src/pages/savings.dart";
 import "src/income/onboarding_page.dart";
 import "src/income/page.dart";
 import "src/expenses/input.dart";
@@ -27,7 +29,10 @@ final router = GoRouter(
     GoRoute(
       path: Routes.onboarding,
       name: Routes.onboarding,
-      builder: (context, state) => IncomeOnboardingPage(),
+      builder: (context, state) => Scaffold(
+        appBar: AppBar(),
+        body: IncomeOnboardingPage(),
+      ),
     ),
     GoRoute(path: Routes.home, redirect: (_, _) => Routes.expenses),
     GoRoute(
@@ -47,6 +52,11 @@ final router = GoRouter(
           path: Routes.expenses,
           name: Routes.expenses,
           builder: (context, state) => ExpensesPage(),
+        ),
+        GoRoute(
+          path: Routes.savings,
+          name: Routes.savings,
+          builder: (context, state) => SavingsPage(),
         ),
       ],
     ),

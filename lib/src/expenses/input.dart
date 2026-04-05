@@ -79,7 +79,7 @@ class ExpenseInputPage extends ReactiveWidget<ExpenseInputViewModel> {
               padding: const .all(12),
               children: [
                 const Text("Enter a name"),
-                TextField(controller: model.nameController),
+                TextField(controller: model.nameController, textCapitalization: .words),
                 const Text("Enter an amount"),
                 moneyInput(model.moneyController),
                 const Text("How often is this expense?"),

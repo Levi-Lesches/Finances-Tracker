@@ -5,6 +5,7 @@ import "package:finances/pages.dart";
 import "package:finances/services.dart";
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await services.init();
   await models.init();
   await models.initFromOthers();
@@ -19,9 +20,7 @@ class FinancesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp.router(
     title: "Flutter Demo",
-    theme: ThemeData(
-      useMaterial3: true,
-    ),
+    theme: ThemeData(useMaterial3: true),
     routerConfig: router,
   );
 }
