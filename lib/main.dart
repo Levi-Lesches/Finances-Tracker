@@ -20,7 +20,10 @@ class FinancesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp.router(
     title: "Flutter Demo",
-    theme: ThemeData(useMaterial3: true),
+    theme: ThemeData(
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff0094A9)),
+    ),
     routerConfig: router,
   );
 }

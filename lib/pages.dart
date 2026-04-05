@@ -22,6 +22,11 @@ class Routes {
   static const savings = "/savings";
 }
 
+Future<void> _import() async {
+  await services.database.import();
+  router.go(Routes.home);
+}
+
 /// The router for the app.
 final router = GoRouter(
   initialLocation: services.database.needsOnboarding ? Routes.onboarding : Routes.expenses,
@@ -30,11 +35,16 @@ final router = GoRouter(
       path: Routes.onboarding,
       name: Routes.onboarding,
       builder: (context, state) => Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: const [IconButton(icon: Icon(Icons.file_open), onPressed: _import)],
+        ),
         body: IncomeOnboardingPage(),
       ),
     ),
-    GoRoute(path: Routes.home, redirect: (_, _) => Routes.expenses),
+    GoRoute(
+      path: Routes.home,
+      redirect: (_, _) => services.database.needsOnboarding ? Routes.onboarding : Routes.expenses,
+    ),
     GoRoute(
       path: Routes.addExpense,
       name: Routes.addExpense,
