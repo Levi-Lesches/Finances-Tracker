@@ -6,6 +6,16 @@ import "package:finances/widgets.dart";
 import "package:flutter/material.dart" hide Interval;
 
 class ExpenseInputViewModel extends ViewModel {
+  Expense? editing;
+  ExpenseInputViewModel([this.editing]) {
+    if (editing != null) {
+      nameController.text = editing!.name;
+      moneyController.text = editing!.amount.inDollars.toString();
+      interval = editing!.interval;
+      isLumpSum = editing!.allAtOnce;
+    }
+  }
+
   final nameController = TextEditingController();
   final moneyController = TextEditingController();
   Interval interval = .monthly;
@@ -34,16 +44,28 @@ class ExpenseInputViewModel extends ViewModel {
       notifyListeners();
       return;
     }
-    final expense = Expense(allAtOnce: isLumpSum, amount: amount, interval: interval, name: name);
-    services.database.expenses.add(expense);
-    services.database.save();
-    router.pop();
+    if (editing != null) {
+      editing!.allAtOnce = isLumpSum;
+      editing!.amount = amount;
+      editing!.interval = interval;
+      editing!.name = name;
+      services.database.save();
+      router.pop();
+    } else {
+      final expense = Expense(allAtOnce: isLumpSum, amount: amount, interval: interval, name: name);
+      services.database.expenses.add(expense);
+      services.database.save();
+      router.pop();
+    }
   }
 }
 
 class ExpenseInputPage extends ReactiveWidget<ExpenseInputViewModel> {
+  final Expense? expense;
+  const ExpenseInputPage(this.expense);
+
   @override
-  ExpenseInputViewModel createModel() => ExpenseInputViewModel();
+  ExpenseInputViewModel createModel() => ExpenseInputViewModel(expense);
 
   @override
   Widget build(BuildContext context, ExpenseInputViewModel model) => Scaffold(

@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   collection: ^1.19.1
+  file_picker: ^11.0.0
   flutter:
     sdk: flutter
   go_router: ^14.2.7

@@ -12,11 +12,14 @@ extension type Money(int inPennies) {
 
   String format() => "\$${NumberFormat.currency(name: "").format(inPennies / 100)}";
 
+  int get inDollars => inPennies ~/ 100;
   bool get isPositive => inPennies >= 0;
   bool get isNegative => inPennies < 0;
 
   int toJson() => inPennies;
   Money.fromJson(this.inPennies);
+  factory Money.fromDollars(int dollars) => Money(dollars * 100);
+  factory Money.zero() => Money(0);
 
   static Money? tryParse(String text) {
     final dollars = int.tryParse(text);

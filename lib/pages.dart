@@ -1,8 +1,11 @@
+import "package:finances/data.dart";
 import "package:finances/services.dart";
 import "package:go_router/go_router.dart";
 export "package:go_router/go_router.dart";
 
+import "src/pages/home.dart";
 import "src/income/onboarding_page.dart";
+import "src/income/page.dart";
 import "src/expenses/input.dart";
 import "src/expenses/page.dart";
 
@@ -12,26 +15,40 @@ class Routes {
   static const home = "/";
   static const onboarding = "/onboarding";
   static const addExpense = "/expenses/add";
+  static const expenses = "/expenses";
+  static const income = "/income";
+  static const savings = "/savings";
 }
 
 /// The router for the app.
 final router = GoRouter(
-  initialLocation: services.database.needsOnboarding ? Routes.onboarding : Routes.home,
+  initialLocation: services.database.needsOnboarding ? Routes.onboarding : Routes.expenses,
   routes: [
-    GoRoute(
-      path: Routes.home,
-      name: Routes.home,
-      builder: (_, __) => ExpensesPage(),
-    ),
     GoRoute(
       path: Routes.onboarding,
       name: Routes.onboarding,
-      builder:(context, state) => IncomeOnboardingPage(),
+      builder: (context, state) => IncomeOnboardingPage(),
     ),
+    GoRoute(path: Routes.home, redirect: (_, _) => Routes.expenses),
     GoRoute(
       path: Routes.addExpense,
       name: Routes.addExpense,
-      builder:(context, state) => ExpenseInputPage(),
-    )
+      builder: (context, state) => ExpenseInputPage(state.extra as Expense?),
+    ),
+    ShellRoute(
+      pageBuilder: (context, state, child) => NoTransitionPage(child: HomePage(child)),
+      routes: [
+        GoRoute(
+          path: Routes.income,
+          name: Routes.income,
+          builder: (context, state) => IncomePage(),
+        ),
+        GoRoute(
+          path: Routes.expenses,
+          name: Routes.expenses,
+          builder: (context, state) => ExpensesPage(),
+        ),
+      ],
+    ),
   ],
 );

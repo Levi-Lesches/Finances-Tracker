@@ -11,54 +11,42 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
   ExpensesPage() : super(models.budget);
 
   @override
-  Widget build(BuildContext context, Budget model) => Scaffold(
-    appBar: AppBar(title: const Text("Expenses")),
-    // floatingActionButton: FloatingActionButton(
-    //   child: const Icon(Icons.wallet),
-    //   onPressed: () => model.deposit(model.paycheck),
-    // ),
-    floatingActionButton: FloatingActionButton(
-      child: const Icon(Icons.add),
-      onPressed: () => router.pushNamed(Routes.addExpense),
-    ),
-    body: Center(
-      child: Column(
-        children: [
-          Text("Wallet", style: context.textTheme.headlineLarge),
-          Row(
-            mainAxisAlignment: .center,
-            children: [
-              Text(model.wallet.format(), style: context.textTheme.displayLarge),
-              const SizedBox(width: 12),
-              IconButton(
-                icon: const Icon(Icons.edit),
-                iconSize: 32,
-                onPressed: () async {
-                  final result = await showMoneyDialog(context);
-                  if (result == null) return;
-                  model.overrideWallet(result);
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          const Divider(),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              childAspectRatio: 2,
-              children: [
-                for (final (expense, amount) in model.budgetBreakdown.records)
-                  ExpenseCard(
-                    expense: expense,
-                    currentSpending: amount,
-                    makePayment: model.pay,
-                  ),
-              ],
-            ),
-          ),
-        ],
+  Widget build(BuildContext context, Budget model) => ListView(
+    padding: const .symmetric(horizontal: 4),
+    children: [
+      Text(
+        "Expect to spend: ${model.remainingExpenses.format()}",
+        style: context.textTheme.titleLarge,
+        textAlign: .center,
       ),
-    ),
+      const SizedBox(height: 12),
+      Text(
+        "${model.actualExpenses.format()} / ${model.estimatedExpenses.format()}",
+        textAlign: .center,
+      ),
+      LinearProgressIndicator(value: model.actualExpenses / model.estimatedExpenses),
+      const SizedBox(height: 12),
+      if (model.isEditing)
+        for (final expense in model.budgetBreakdown.keys)
+          ListTile(
+            title: Text(expense.name),
+            subtitle: Text(expense.amount.format()),
+            trailing: IconButton(
+              onPressed: () => router.pushNamed(Routes.addExpense, extra: expense),
+              icon: const Icon(Icons.edit),
+            ),
+          )
+      else
+        GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 2,
+          physics: const NeverScrollableScrollPhysics(),
+          childAspectRatio: 1.75,
+          children: [
+            for (final (expense, amount) in model.budgetBreakdown.records)
+              ExpenseCard(expense: expense, currentSpending: amount, makePayment: model.pay),
+          ],
+        ),
+    ],
   );
 }

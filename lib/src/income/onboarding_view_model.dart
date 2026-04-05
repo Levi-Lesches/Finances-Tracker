@@ -1,4 +1,5 @@
 import "package:finances/data.dart";
+import "package:finances/models.dart";
 import "package:finances/pages.dart";
 import "package:finances/services.dart";
 import "package:finances/view_models.dart";
@@ -10,6 +11,13 @@ class IncomeOnboardingViewModel extends ViewModel {
   DateTime firstPayDay = DateTime.now();
   String? paycheckError;
   String? salaryError;
+
+  IncomeOnboardingViewModel() {
+    if (services.database.needsOnboarding) return;
+    paycheckController.text = services.database.income.paycheck.inDollars.toString();
+    salaryController.text = services.database.income.annualSalary.inDollars.toString();
+    firstPayDay = services.database.income.firstPayDay;
+  }
 
   void updatePayDay(DateTime value) {
     firstPayDay = value;
@@ -35,6 +43,10 @@ class IncomeOnboardingViewModel extends ViewModel {
       firstPayDay: firstPayDay,
     );
     await services.database.save();
-    router.go(Routes.home);
+    if (models.budget.isEditing) {
+      models.budget.stopEditing();
+    } else {
+      router.go(Routes.home);
+    }
   }
 }

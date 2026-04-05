@@ -14,17 +14,22 @@ class ExpenseCard extends StatelessWidget {
 
   Payment _pay(Money amount) => Payment(amount: amount, expenseID: expense.id);
 
+  Future<void> tapToPay(BuildContext context, {bool isPayment = true}) async {
+    final factor = isPayment ? 1 : -1;
+    if (expense.allAtOnce) {
+      makePayment(_pay(expense.amount * factor));
+    } else {
+      final amount = await showMoneyDialog(context);
+      if (amount == null) return;
+      makePayment(_pay(amount * factor));
+    }
+  }
+
   @override
   Widget build(BuildContext context) => InkWell(
-    onTap: () async {
-      if (expense.allAtOnce) {
-        makePayment(_pay(expense.amount));
-      } else {
-        final amount = await showMoneyDialog(context);
-        if (amount == null) return;
-        makePayment(_pay(amount));
-      }
-    },
+    onTap: () => tapToPay(context),
+    onLongPress: () => tapToPay(context, isPayment: false),
+    onSecondaryTap: () => tapToPay(context, isPayment: false),
     child: Card(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -32,7 +37,8 @@ class ExpenseCard extends StatelessWidget {
           children: [
             Text(expense.name, style: context.textTheme.titleLarge),
             const Text("Tap to pay", style: TextStyle(fontStyle: .italic)),
-            const SizedBox(height: 24),
+            const Text("Hold to un-spend", style: TextStyle(fontStyle: .italic)),
+            const Spacer(),
             Text("${currentSpending.format()} / ${expense.monthlyAmount.format()}"),
             LinearProgressIndicator(value: currentSpending / expense.monthlyAmount),
           ],

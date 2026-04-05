@@ -14,10 +14,10 @@ class Expense {
     required this.interval,
     required this.allAtOnce,
   });
-  final String name;
-  final Money amount;
-  final Interval interval;
-  final bool allAtOnce;
+  String name;
+  Money amount;
+  Interval interval;
+  bool allAtOnce;
 
   @override
   String toString() => name;
@@ -27,6 +27,8 @@ class Expense {
     .monthly => amount,
     .yearly => amount.divide(12),
   };
+
+  Money get annualAmount => monthlyAmount * 12;
 
   Expense.fromJson(Json json)
     : name = json["name"],
@@ -46,4 +48,5 @@ class Expense {
 
 extension ExpensesIterableUtils on Iterable<Expense> {
   Money get monthlyExpenses => map((e) => e.monthlyAmount).total;
+  Money get annualExpenses => map((e) => e.annualAmount).total;
 }

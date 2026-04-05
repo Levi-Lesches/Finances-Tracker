@@ -4,7 +4,7 @@ import "package:finances/data.dart";
 import "model.dart";
 
 class Budget extends DataModel {
-  Income get _income => services.database.income;
+  Income get income => services.database.income;
   List<Expense> get _expenses => services.database.expenses;
   List<Payment> get payments => services.database.payments;
   List<SavingsGoal> get savingsGoals => services.database.goals;
@@ -20,14 +20,26 @@ class Budget extends DataModel {
     services.database.save();
   }
 
+  bool isEditing = false;
+  void toggleEdit() {
+    isEditing = !isEditing;
+    notifyListeners();
+  }
+
+  // Income page
+  Money get paycheck => income.paycheck;
+  Money get annualExpenses => _expenses.annualExpenses;
+  Money get netAnnualIncome => income.annualIncome - annualExpenses;
+  Money get netMonthlyIncome => netAnnualIncome.divide(12);
+
+  // Expenses page
   Money get estimatedExpenses => _expenses.monthlyExpenses;
   Money get actualExpenses => payments.total;
   Money get remainingExpenses => estimatedExpenses - actualExpenses;
 
-  Money get income => _income.monthlyIncome;
-  Money get paycheck => _income.paycheck;
-  Money get estimatedSavings => income - estimatedExpenses;
-  Money get actualSavings => income - payments.total;
+  // Savings page
+  Money get estimatedSavings => income.monthlyIncome - estimatedExpenses;
+  Money get actualSavings => income.monthlyIncome - payments.total;
 
   void deposit(Money amount) {
     wallet += amount;
@@ -76,9 +88,8 @@ class Budget extends DataModel {
     notifyListeners();
   }
 
-  void addExpense(Expense value) {
-    _expenses.add(value);
-    services.database.save();
+  void stopEditing() {
+    isEditing = false;
     notifyListeners();
   }
 }
