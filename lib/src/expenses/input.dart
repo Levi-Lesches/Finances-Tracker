@@ -101,8 +101,19 @@ class ExpenseInputPage extends ReactiveWidget<ExpenseInputViewModel> {
             ),
           ),
           Row(
-            mainAxisAlignment: .end,
             children: [
+              if (model.editing != null)
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(foregroundColor: Colors.red),
+                  child: const Text("Delete"),
+                  onPressed: () async {
+                    services.database.expenses.remove(model.editing);
+                    await services.database.save();
+                    if (!context.mounted) return;
+                    context.pop();
+                  },
+                ),
+              const Spacer(),
               TextButton(child: const Text("Cancel"), onPressed: () => context.pop()),
               const SizedBox(width: 12),
               FilledButton(child: const Text("Save"), onPressed: () => model.save()),
