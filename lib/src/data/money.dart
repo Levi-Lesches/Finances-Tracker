@@ -2,7 +2,7 @@ import "package:collection/collection.dart";
 import "package:intl/intl.dart";
 
 extension type const Money(int inPennies) {
-  Money operator *(int n) => Money(inPennies * n);
+  Money operator *(num n) => Money((inPennies * n).round());
   double operator /(Money other) => inPennies / other.inPennies;
   Money operator +(Money other) => Money(inPennies + other.inPennies);
   Money operator -(Money other) => Money(inPennies - other.inPennies);

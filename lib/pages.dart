@@ -5,7 +5,7 @@ import "package:go_router/go_router.dart";
 export "package:go_router/go_router.dart";
 
 import "src/pages/home.dart";
-import "src/pages/savings.dart";
+import "src/savings/page.dart";
 import "src/income/onboarding_page.dart";
 import "src/income/page.dart";
 import "src/expenses/input.dart";

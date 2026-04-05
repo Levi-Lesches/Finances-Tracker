@@ -6,7 +6,11 @@ import "model.dart";
 class Budget extends DataModel {
   Income get income => services.database.income;
   List<Expense> get _expenses => services.database.expenses;
-  List<SavingsGoal> get savingsGoals => services.database.goals;
+  // List<SavingsGoal> get savingsGoals => services.database.goals;
+  List<SavingsGoal> get savingsGoals => [
+    SavingsGoal(goal: Money.fromDollars(15_000), name: "New Car")
+      ..progress = Money.fromDollars(8_000),
+  ];
 
   @override
   Future<void> init() async {
@@ -47,8 +51,8 @@ class Budget extends DataModel {
   Money get remainingWallet => wallet - remainingExpenses.clamp();
 
   // Savings page
-  Money get estimatedSavings => income.monthlyIncome - estimatedExpenses;
-  Money get actualSavings => income.monthlyIncome - _expenses.totalPaid;
+  Money get estimatedSavings => (income.monthlyIncome - estimatedExpenses) * 0.8;
+  Money get actualSavings => (income.monthlyIncome - _expenses.totalPaid) * 0.8;
 
   void deposit(Money amount) {
     wallet += amount;
@@ -83,7 +87,8 @@ class Budget extends DataModel {
   };
 
   double estimateMonthsForGoal(SavingsGoal goal) {
-    final moneyRemaining = goal.goal - goal.progress;
+    if (goal.goal == null) return 0;
+    final moneyRemaining = goal.goal! - goal.progress;
     return estimatedSavings / moneyRemaining;
   }
 
