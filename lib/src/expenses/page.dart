@@ -14,11 +14,19 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
   Widget build(BuildContext context, Budget model) => ListView(
     padding: const .symmetric(horizontal: 4),
     children: [
-      Text(
-        "Expect to spend: ${model.remainingExpenses.format()}",
-        style: context.textTheme.titleLarge,
-        textAlign: .center,
-      ),
+      if (model.remainingExpenses > Money.zero)
+        Text(
+          "Expect to spend: ${model.remainingExpenses.format()}",
+          style: context.textTheme.titleLarge,
+          textAlign: .center,
+        )
+      else
+        Text(
+          "Over budget by: ${(model.remainingExpenses * -1).format()}",
+          style: context.textTheme.titleLarge,
+          textAlign: .center,
+        ),
+
       const SizedBox(height: 12),
       Text(
         "${model.actualExpenses.format()} / ${model.estimatedExpenses.format()}",

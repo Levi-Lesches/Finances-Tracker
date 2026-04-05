@@ -31,6 +31,7 @@ class ExpenseCard extends StatelessWidget {
     onLongPress: () => tapToPay(context, isPayment: false),
     onSecondaryTap: () => tapToPay(context, isPayment: false),
     child: Card(
+      color: expense.amountPaid > expense.amount ? Colors.red.shade300 : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
         child: Column(
