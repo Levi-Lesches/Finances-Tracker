@@ -13,7 +13,7 @@ class Income {
 
   Money get annualTaxes => annualSalary - (paycheck * 26);
   Money get annualIncome => paycheck * 26;
-  Money get monthlyIncome => annualIncome / 12;
+  Money get monthlyIncome => annualIncome.divide(12);
 
   Json toJson() => {
     "annualSalary": annualSalary.toJson(),

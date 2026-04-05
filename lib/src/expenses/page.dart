@@ -1,7 +1,11 @@
+import "package:finances/data.dart";
+import "package:finances/pages.dart";
 import "package:flutter/material.dart";
 
 import "package:finances/models.dart";
 import "package:finances/widgets.dart";
+
+import "card.dart";
 
 class ExpensesPage extends ReusableReactiveWidget<Budget> {
   ExpensesPage() : super(models.budget);
@@ -9,9 +13,13 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
   @override
   Widget build(BuildContext context, Budget model) => Scaffold(
     appBar: AppBar(title: const Text("Expenses")),
+    // floatingActionButton: FloatingActionButton(
+    //   child: const Icon(Icons.wallet),
+    //   onPressed: () => model.deposit(model.paycheck),
+    // ),
     floatingActionButton: FloatingActionButton(
-      child: const Icon(Icons.wallet),
-      onPressed: () => model.deposit(model.paycheck),
+      child: const Icon(Icons.add),
+      onPressed: () => router.pushNamed(Routes.addExpense),
     ),
     body: Center(
       child: Column(
@@ -32,6 +40,22 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
                 },
               ),
             ],
+          ),
+          const SizedBox(height: 24),
+          const Divider(),
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: 2,
+              children: [
+                for (final (expense, amount) in model.budgetBreakdown.records)
+                  ExpenseCard(
+                    expense: expense,
+                    currentSpending: amount,
+                    makePayment: model.pay,
+                  ),
+              ],
+            ),
           ),
         ],
       ),

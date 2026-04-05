@@ -36,6 +36,7 @@ class Budget extends DataModel {
 
   void pay(Payment payment) {
     payments.add(payment);
+    services.database.save();
     wallet -= payment.amount;
     notifyListeners();
   }
@@ -67,11 +68,17 @@ class Budget extends DataModel {
 
   double estimateMonthsForGoal(SavingsGoal goal) {
     final moneyRemaining = goal.goal - goal.progress;
-    return estimatedSavings.inPennies / moneyRemaining.inPennies;
+    return estimatedSavings / moneyRemaining;
   }
 
   void overrideWallet(Money amount) {
     wallet = amount;
+    notifyListeners();
+  }
+
+  void addExpense(Expense value) {
+    _expenses.add(value);
+    services.database.save();
     notifyListeners();
   }
 }

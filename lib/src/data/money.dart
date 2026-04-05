@@ -1,13 +1,14 @@
 import "package:collection/collection.dart";
 import "package:intl/intl.dart";
 
-extension type Money (int inPennies) {
-  Money operator * (int n) => Money(inPennies * n);
-  Money operator / (int n) => Money(inPennies ~/ n);
-  Money operator + (Money other) => Money(inPennies + other.inPennies);
-  Money operator - (Money other) => Money(inPennies - other.inPennies);
-  bool operator < (Money other) => inPennies < other.inPennies;
-  bool operator > (Money other) => inPennies > other.inPennies;
+extension type Money(int inPennies) {
+  Money operator *(int n) => Money(inPennies * n);
+  double operator /(Money other) => inPennies / other.inPennies;
+  Money operator +(Money other) => Money(inPennies + other.inPennies);
+  Money operator -(Money other) => Money(inPennies - other.inPennies);
+  bool operator <(Money other) => inPennies < other.inPennies;
+  bool operator >(Money other) => inPennies > other.inPennies;
+  Money divide(int n) => Money(inPennies ~/ n);
 
   String format() => "\$${NumberFormat.currency(name: "").format(inPennies / 100)}";
 

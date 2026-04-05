@@ -31,3 +31,7 @@ extension ListUtils<E> on List<E> {
     }
   }
 }
+
+extension StringUtils on String {
+  String? get nullIfEmpty => trim().isEmpty ? null : trim();
+}
