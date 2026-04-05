@@ -33,6 +33,8 @@ class Expense {
 
   Money get annualAmount => monthlyAmount * 12;
 
+  Money get monthlyAmountRemaining => (monthlyAmount - amountPaid).clamp();
+
   Expense.fromJson(Json json)
     : name = json["name"],
       amount = Money.fromJson(json["amount"]),
@@ -55,4 +57,5 @@ extension ExpensesIterableUtils on Iterable<Expense> {
   Money get monthlyExpenses => map((e) => e.monthlyAmount).total;
   Money get annualExpenses => map((e) => e.annualAmount).total;
   Money get totalPaid => map((e) => e.amountPaid).total;
+  Money get totalRemaining => map((e) => e.monthlyAmountRemaining).total;
 }

@@ -36,7 +36,8 @@ class Budget extends DataModel {
   // Expenses page
   Money get estimatedExpenses => _expenses.monthlyExpenses;
   Money get actualExpenses => _expenses.totalPaid;
-  Money get remainingExpenses => estimatedExpenses - actualExpenses;
+  Money get remainingExpenses => _expenses.totalRemaining;
+  Money get remainingWallet => wallet - remainingExpenses.clamp();
 
   // Savings page
   Money get estimatedSavings => income.monthlyIncome - estimatedExpenses;

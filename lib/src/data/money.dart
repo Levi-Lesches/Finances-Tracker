@@ -10,6 +10,8 @@ extension type const Money(int inPennies) {
   bool operator >(Money other) => inPennies > other.inPennies;
   Money divide(int n) => Money(inPennies ~/ n);
 
+
+  Money clamp() => this > zero ? this : zero;
   String format() => "\$${NumberFormat.currency(name: "").format(inPennies / 100)}";
 
   int get inDollars => inPennies ~/ 100;

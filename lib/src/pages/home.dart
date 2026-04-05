@@ -58,7 +58,32 @@ class HomePage extends ReusableReactiveWidget<Budget> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: .center,
+            children: [
+              TextButton.icon(
+                icon: const Icon(Icons.remove_circle),
+                label: const Text("Withdraw"),
+                onPressed: () async {
+                  final amount = await showMoneyDialog(context);
+                  if (amount == null) return;
+                  model.deposit(amount * -1);
+                },
+              ),
+              const SizedBox(width: 12),
+              TextButton.icon(
+                icon: const Icon(Icons.add_circle),
+                label: const Text("Deposit"),
+                onPressed: () async {
+                  final amount = await showMoneyDialog(context);
+                  if (amount == null) return;
+                  model.deposit(amount);
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
           const Divider(),
           Expanded(
             child: Padding(padding: const EdgeInsets.all(8), child: child),
