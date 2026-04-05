@@ -38,10 +38,16 @@ class HomePage extends ReusableReactiveWidget<Budget> {
     appBar: AppBar(
       title: const Text("My Finances"),
       actions: [
-        IconButton(icon: brightnessIcon(services.settings.theme.value), onPressed: services.settings.toggleTheme),
+        IconButton(
+          icon: brightnessIcon(services.settings.theme.value),
+          onPressed: services.settings.toggleTheme,
+        ),
         IconButton(icon: const Icon(Icons.file_open), onPressed: model.import),
         IconButton(icon: const Icon(Icons.save), onPressed: services.database.export),
-        IconButton(icon: const Icon(Icons.edit), onPressed: model.toggleEdit),
+        IconButton(
+          icon: model.isEditing ? const Icon(Icons.edit_off) : const Icon(Icons.edit),
+          onPressed: model.toggleEdit,
+        ),
       ],
     ),
     floatingActionButton: fabs[routeIndex](model),
@@ -52,6 +58,7 @@ class HomePage extends ReusableReactiveWidget<Budget> {
           Row(
             mainAxisAlignment: .center,
             children: [
+              const SizedBox(width: 32),
               Text(model.wallet.format(), style: context.textTheme.displayLarge),
               const SizedBox(width: 12),
               IconButton(

@@ -6,11 +6,11 @@ import "model.dart";
 class Budget extends DataModel {
   Income get income => services.database.income;
   List<Expense> get _expenses => services.database.expenses;
-  // List<SavingsGoal> get savingsGoals => services.database.goals;
-  List<SavingsGoal> get savingsGoals => [
-    SavingsGoal(goal: Money.fromDollars(15_000), name: "New Car")
-      ..progress = Money.fromDollars(8_000),
-  ];
+  List<SavingsGoal> get savingsGoals => services.database.goals;
+  // List<SavingsGoal> get savingsGoals => [
+  // SavingsGoal(goal: Money.fromDollars(15_000), name: "New Car")
+  //   ..progress = Money.fromDollars(8_000),
+  // ];
 
   @override
   Future<void> init() async {

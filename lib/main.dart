@@ -21,6 +21,7 @@ class FinancesApp extends StatelessWidget {
   Widget build(BuildContext context) => ValueListenableBuilder(
     valueListenable: services.settings.theme,
     builder: (context, value, _) => MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: "Flutter Demo",
       theme: ThemeData(
         useMaterial3: true,

@@ -6,6 +6,7 @@ export "package:go_router/go_router.dart";
 
 import "src/pages/home.dart";
 import "src/savings/page.dart";
+import "src/savings/modify.dart";
 import "src/income/onboarding_page.dart";
 import "src/income/page.dart";
 import "src/expenses/input.dart";
@@ -17,6 +18,7 @@ class Routes {
   static const home = "/";
   static const onboarding = "/onboarding";
   static const addExpense = "/expenses/add";
+  static const addSaving = "/savings/add";
   static const expenses = "/expenses";
   static const income = "/income";
   static const savings = "/savings";
@@ -49,6 +51,11 @@ final router = GoRouter(
       path: Routes.addExpense,
       name: Routes.addExpense,
       builder: (context, state) => ExpenseInputPage(state.extra as Expense?),
+    ),
+    GoRoute(
+      path: Routes.addSaving,
+      name: Routes.addSaving,
+      builder: (context, state) => SavingsEditPage(state.extra as SavingsGoal?),
     ),
     ShellRoute(
       pageBuilder: (context, state, child) => NoTransitionPage(child: HomePage(child)),

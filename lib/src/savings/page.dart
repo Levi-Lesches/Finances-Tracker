@@ -1,5 +1,6 @@
 import "package:finances/data.dart";
 import "package:finances/models.dart";
+import "package:finances/pages.dart";
 import "package:finances/widgets.dart";
 import "package:flutter/material.dart";
 
@@ -84,17 +85,19 @@ class SavingsPage extends ReusableReactiveWidget<Budget> {
   @override
   Widget build(BuildContext context, Budget model) => Column(
     children: [
-      if (model.savingsGoals.isEmpty)
-        const Text("No savings goals yet")
-      else if (model.isEditing) ...[
-        const Text("Tap a goal to change it"),
+      if (model.isEditing) ...[
         for (final goal in model.savingsGoals) SavingsTile(goal),
-      ] else ...[
+        ListTile(
+          title: const Text("New Savings Goal"),
+          trailing: IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () => router.pushNamed(Routes.addSaving),
+          ),
+        ),
+      ] else if (model.savingsGoals.isEmpty)
+        const Text("No savings goals yet")
+      else ...[
         ...buildCurrentGoal(context, model, model.savingsGoals.first),
-
-        const SizedBox(height: 32),
-        if (model.savingsGoals.length < 2) const Text("No other savings goals"),
-        for (final goal in model.savingsGoals.sublist(1)) SavingsTile(goal),
       ],
     ],
   );
