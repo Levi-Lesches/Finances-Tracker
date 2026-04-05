@@ -12,7 +12,7 @@ class ExpenseCard extends StatelessWidget {
     required this.makePayment,
   });
 
-  Payment _pay(Money amount) => Payment(amount: amount, expenseID: expense.id);
+  Payment _pay(Money amount) => Payment(amount: amount, expense: expense);
 
   Future<void> tapToPay(BuildContext context, {bool isPayment = true}) async {
     final factor = isPayment ? 1 : -1;

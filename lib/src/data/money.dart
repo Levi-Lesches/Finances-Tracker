@@ -1,7 +1,7 @@
 import "package:collection/collection.dart";
 import "package:intl/intl.dart";
 
-extension type Money(int inPennies) {
+extension type const Money(int inPennies) {
   Money operator *(int n) => Money(inPennies * n);
   double operator /(Money other) => inPennies / other.inPennies;
   Money operator +(Money other) => Money(inPennies + other.inPennies);
@@ -19,7 +19,7 @@ extension type Money(int inPennies) {
   int toJson() => inPennies;
   Money.fromJson(this.inPennies);
   factory Money.fromDollars(int dollars) => Money(dollars * 100);
-  factory Money.zero() => Money(0);
+  static const zero = Money(0);
 
   static Money? tryParse(String text) {
     final dollars = int.tryParse(text);

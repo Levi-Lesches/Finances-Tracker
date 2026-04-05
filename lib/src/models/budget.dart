@@ -6,7 +6,7 @@ import "model.dart";
 class Budget extends DataModel {
   Income get income => services.database.income;
   List<Expense> get _expenses => services.database.expenses;
-  List<Payment> get payments => services.database.payments;
+  // List<Payment> get payments => services.database.payments;
   List<SavingsGoal> get savingsGoals => services.database.goals;
 
   @override
@@ -34,12 +34,12 @@ class Budget extends DataModel {
 
   // Expenses page
   Money get estimatedExpenses => _expenses.monthlyExpenses;
-  Money get actualExpenses => payments.total;
+  Money get actualExpenses => _expenses.totalPaid;
   Money get remainingExpenses => estimatedExpenses - actualExpenses;
 
   // Savings page
   Money get estimatedSavings => income.monthlyIncome - estimatedExpenses;
-  Money get actualSavings => income.monthlyIncome - payments.total;
+  Money get actualSavings => income.monthlyIncome - _expenses.totalPaid;
 
   void deposit(Money amount) {
     wallet += amount;
@@ -47,15 +47,14 @@ class Budget extends DataModel {
   }
 
   void pay(Payment payment) {
-    payments.add(payment);
-    services.database.save();
+    payment.expense.amountPaid += payment.amount;
     wallet -= payment.amount;
     notifyListeners();
   }
 
   Money save(SavingsGoal goal, Money amount) {
     // default amount in UI = wallet - remainingExpenses;
-    if (amount.isNegative) return Money(0);
+    if (amount.isNegative) return Money.zero;
     goal.save(amount);
     services.database.save();
     notifyListeners();
@@ -71,11 +70,7 @@ class Budget extends DataModel {
   }
 
   Map<Expense, Money> get budgetBreakdown => {
-    for (final expense in _expenses)
-      expense: payments
-          .where((payment) => payment.expenseID == expense.id)
-          .map((payment) => payment.amount)
-          .total,
+    for (final expense in _expenses) expense: expense.amountPaid,
   };
 
   double estimateMonthsForGoal(SavingsGoal goal) {

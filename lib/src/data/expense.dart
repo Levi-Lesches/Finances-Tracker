@@ -13,9 +13,12 @@ class Expense {
     required this.amount,
     required this.interval,
     required this.allAtOnce,
+    this.amountPaid = Money.zero,
   });
+
   String name;
   Money amount;
+  Money amountPaid;
   Interval interval;
   bool allAtOnce;
 
@@ -33,6 +36,7 @@ class Expense {
   Expense.fromJson(Json json)
     : name = json["name"],
       amount = Money.fromJson(json["amount"]),
+      amountPaid = Money.fromJson(json["currentSpending"]),
       interval = Interval.values.byName(json["interval"]),
       allAtOnce = json["allAtOnce"],
       id = json["id"];
@@ -40,6 +44,7 @@ class Expense {
   Json toJson() => {
     "name": name,
     "amount": amount.toJson(),
+    "currentSpending": amountPaid.toJson(),
     "interval": interval.name,
     "allAtOnce": allAtOnce,
     "id": id,
@@ -49,4 +54,5 @@ class Expense {
 extension ExpensesIterableUtils on Iterable<Expense> {
   Money get monthlyExpenses => map((e) => e.monthlyAmount).total;
   Money get annualExpenses => map((e) => e.annualAmount).total;
+  Money get totalPaid => map((e) => e.amountPaid).total;
 }

@@ -26,7 +26,7 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
       ),
       LinearProgressIndicator(value: model.actualExpenses / model.estimatedExpenses),
       const SizedBox(height: 12),
-      if (model.isEditing)
+      if (model.isEditing) ...[
         for (final expense in model.budgetBreakdown.keys)
           ListTile(
             title: Text(expense.name),
@@ -35,8 +35,15 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
               onPressed: () => router.pushNamed(Routes.addExpense, extra: expense),
               icon: const Icon(Icons.edit),
             ),
-          )
-      else
+          ),
+        ListTile(
+          title: const Text("Add new expense"),
+          trailing: IconButton(
+            onPressed: () => router.pushNamed(Routes.addExpense),
+            icon: const Icon(Icons.add),
+          ),
+        ),
+      ] else
         GridView.count(
           shrinkWrap: true,
           crossAxisCount: 2,

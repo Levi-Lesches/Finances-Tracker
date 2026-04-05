@@ -8,7 +8,7 @@ class SavingsGoal {
     required this.name,
     required this.goal,
   });
-  Money progress = Money(0);
+  Money progress = Money.zero;
 
   Money save(Money amount) {
     progress += amount;
@@ -17,7 +17,7 @@ class SavingsGoal {
       progress = goal;
       return leftover;
     } else {
-      return Money(0);
+      return Money.zero;
     }
   }
 

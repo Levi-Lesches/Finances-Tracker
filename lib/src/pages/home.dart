@@ -13,11 +13,7 @@ final fabs = <Widget? Function(Budget)>[
     child: const Icon(Icons.credit_score),
     onPressed: () => model.deposit(model.paycheck),
   ),
-  (Budget model) => FloatingActionButton(
-    tooltip: "Add expense",
-    child: const Icon(Icons.add),
-    onPressed: () => router.pushNamed(Routes.addExpense),
-  ),
+  (Budget model) => null,
   (Budget model) => null,
 ];
 
