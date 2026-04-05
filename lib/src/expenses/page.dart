@@ -44,6 +44,7 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
         "${model.actualExpenses.format()} / ${model.estimatedExpenses.format()}",
         textAlign: .center,
       ),
+      const SizedBox(height: 8),
       if (model.estimatedExpenses > Money.zero)
         LinearProgressIndicator(value: model.actualExpenses / model.estimatedExpenses),
       const SizedBox(height: 12),

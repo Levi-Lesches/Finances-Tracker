@@ -17,6 +17,12 @@ final fabs = <Widget? Function(Budget)>[
   (Budget model) => null,
 ];
 
+Icon brightnessIcon(ThemeMode mode) => switch (mode) {
+  .dark => const Icon(Icons.dark_mode),
+  .light => const Icon(Icons.light_mode),
+  .system => const Icon(Icons.brightness_auto),
+};
+
 /// The home page.
 class HomePage extends ReusableReactiveWidget<Budget> {
   final Widget child;
@@ -32,6 +38,7 @@ class HomePage extends ReusableReactiveWidget<Budget> {
     appBar: AppBar(
       title: const Text("My Finances"),
       actions: [
+        IconButton(icon: brightnessIcon(services.settings.theme.value), onPressed: services.settings.toggleTheme),
         IconButton(icon: const Icon(Icons.file_open), onPressed: model.import),
         IconButton(icon: const Icon(Icons.save), onPressed: services.database.export),
         IconButton(icon: const Icon(Icons.edit), onPressed: model.toggleEdit),

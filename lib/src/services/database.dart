@@ -2,19 +2,15 @@ import "dart:convert";
 import "dart:io";
 
 import "package:finances/data.dart";
-import "package:path_provider/path_provider.dart";
+import "package:finances/services.dart";
 import "package:file_picker/file_picker.dart";
 
-import "service.dart";
-
 class DatabaseService extends Service {
-  late Directory dir;
-  File get file => File("${dir.path}/data.json");
+  File get file => File("${Services.dir.path}/data.json");
   bool get needsOnboarding => !file.existsSync();
 
   @override
   Future<void> init() async {
-    dir = await getApplicationSupportDirectory();
     if (needsOnboarding) return;
     final jsonString = await file.readAsString();
     final json = jsonDecode(jsonString) as Json;

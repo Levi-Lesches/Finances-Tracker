@@ -10,7 +10,14 @@ class Budget extends DataModel {
 
   @override
   Future<void> init() async {
+    services.settings.theme.addListener(notifyListeners);
     _wallet = services.database.wallet;
+  }
+
+  @override
+  void dispose() {
+    services.settings.theme.removeListener(notifyListeners);
+    super.dispose();
   }
 
   Money _wallet = Money.zero;

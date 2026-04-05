@@ -6,6 +6,11 @@ extension JsonUtils on Json {
     for (final element in (this[key] as List).cast<Json>())
       fromJson(element),
   ];
+
+  R? maybe<R, V>(String key, R Function(V) parse) {
+    final value = this[key];
+    return value == null ? null : parse(value);
+  }
 }
 
 /// Utils on [Map].

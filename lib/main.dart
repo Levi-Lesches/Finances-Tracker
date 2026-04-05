@@ -18,12 +18,19 @@ class FinancesApp extends StatelessWidget {
   const FinancesApp();
 
   @override
-  Widget build(BuildContext context) => MaterialApp.router(
-    title: "Flutter Demo",
-    theme: ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff0094A9)),
+  Widget build(BuildContext context) => ValueListenableBuilder(
+    valueListenable: services.settings.theme,
+    builder: (context, value, _) => MaterialApp.router(
+      title: "Flutter Demo",
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff0094A9)),
+      ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(brightness: .dark, seedColor: const Color(0xff0094A9)),
+      ),
+      themeMode: value,
+      routerConfig: router,
     ),
-    routerConfig: router,
   );
 }
