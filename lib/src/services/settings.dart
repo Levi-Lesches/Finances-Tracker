@@ -7,6 +7,7 @@ import "package:flutter/material.dart";
 
 class SettingsService extends Service {
   ValueNotifier<ThemeMode> theme = ValueNotifier(.system);
+  int goalIndex = 0;
   File get file => File("${Services.dir.path}/settings.json");
 
   @override
@@ -17,6 +18,7 @@ class SettingsService extends Service {
     final json = await file.readAsString();
     final data = jsonDecode(json) as Json;
     theme.value = data.maybe("theme", ThemeMode.values.byName) ?? ThemeMode.system;
+    goalIndex = data["goalIndex"] ?? -1;
   }
 
   void toggleTheme() {
@@ -28,5 +30,6 @@ class SettingsService extends Service {
     save();
   }
 
-  Future<void> save() => file.writeAsString(jsonEncode({"theme": theme.value.name}));
+  Future<void> save() =>
+      file.writeAsString(jsonEncode({"theme": theme.value.name, "goalIndex": goalIndex}));
 }

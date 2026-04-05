@@ -1,16 +1,18 @@
 import "package:finances/services.dart";
 import "package:finances/data.dart";
+import "package:finances/widgets.dart";
 
 import "model.dart";
 
 class Budget extends DataModel {
   Income get income => services.database.income;
-  List<Expense> get _expenses => services.database.expenses;
+  List<Expense> get allExpenses => services.database.expenses;
   List<SavingsGoal> get savingsGoals => services.database.goals;
-  // List<SavingsGoal> get savingsGoals => [
-  // SavingsGoal(goal: Money.fromDollars(15_000), name: "New Car")
-  //   ..progress = Money.fromDollars(8_000),
-  // ];
+  SavingsGoal? get chosenGoal {
+    final index = services.settings.goalIndex;
+    if (index == -1 || index >= savingsGoals.length) return null;
+    return savingsGoals[index];
+  }
 
   @override
   Future<void> init() async {
@@ -40,56 +42,67 @@ class Budget extends DataModel {
 
   // Income page
   Money get paycheck => income.paycheck;
-  Money get annualExpenses => _expenses.annualExpenses;
+  Money get annualExpenses => allExpenses.annualExpenses;
   Money get netAnnualIncome => income.annualIncome - annualExpenses;
   Money get netMonthlyIncome => netAnnualIncome.divide(12);
 
   // Expenses page
-  Money get estimatedExpenses => _expenses.monthlyExpenses;
-  Money get actualExpenses => _expenses.totalPaid;
-  Money get remainingExpenses => _expenses.totalRemaining;
+  Money get estimatedExpenses => allExpenses.monthlyExpenses;
+  Money get actualExpenses => allExpenses.totalPaid;
+  Money get remainingExpenses => allExpenses.totalRemaining;
   Money get remainingWallet => wallet - remainingExpenses.clamp();
 
   // Savings page
   Money get estimatedSavings => (income.monthlyIncome - estimatedExpenses) * 0.8;
-  Money get actualSavings => ((income.monthlyIncome - _expenses.totalPaid) * 0.8).clamp();
+  Money get actualSavings => ((income.monthlyIncome - actualExpenses) * 0.8).clamp();
 
   void deposit(Money amount) {
     wallet += amount;
+    showSnackBar("Deposited ${amount.format()}");
     notifyListeners();
   }
 
   void pay(Payment payment) {
     payment.expense.amountPaid += payment.amount;
     wallet -= payment.amount;
+    showSnackBar("Paid ${payment.amount.format()} to ${payment.expense}");
     notifyListeners();
   }
 
-  Money save(SavingsGoal goal, Money amount) {
-    // default amount in UI = wallet - remainingExpenses;
-    if (amount.isNegative) return Money.zero;
-    goal.save(amount);
-    services.database.save();
+  void save(SavingsGoal goal, Money amount) {
+    if (amount.isNegative || amount > wallet) {
+      return showSnackBar("Not enough money in the wallet to save ${amount.format()}");
+    }
+    wallet -= amount;
+    final leftover = goal.save(amount);
+    final actualSaved = amount - leftover;
+    wallet += leftover;
+    showSnackBar("Saved ${actualSaved.format()} for ${goal.name}");
     notifyListeners();
-    return amount;
   }
 
   void withdraw(SavingsGoal goal, Money amount) {
-    if (goal.progress < amount) throw RangeError("Not enough money saved");
+    if (goal.progress < amount) return showSnackBar("Not enough money saved");
     goal.progress -= amount;
-    services.database.save();
     wallet += amount;
+    showSnackBar("Transferred ${amount.format()} back to the wallet");
     notifyListeners();
   }
 
-  Map<Expense, Money> get budgetBreakdown => {
-    for (final expense in _expenses) expense: expense.amountPaid,
-  };
+  void transfer(SavingsGoal from, SavingsGoal to, Money amount) {
+    if (from.progress < amount) return showSnackBar("Not enough money saved");
+    from.progress -= amount;
+    final leftover = to.save(amount);
+    final actualAmount = amount - leftover;
+    from.progress += leftover;
+    showSnackBar("Transferred ${actualAmount.format()} to ${to.name}");
+    notifyListeners();
+  }
 
   double estimateMonthsForGoal(SavingsGoal goal) {
     if (goal.goal == null) return 0;
     final moneyRemaining = goal.goal! - goal.progress;
-    return estimatedSavings / moneyRemaining;
+    return moneyRemaining / estimatedSavings;
   }
 
   void overrideWallet(Money amount) {
@@ -103,9 +116,10 @@ class Budget extends DataModel {
   }
 
   void rollover() {
-    for (final expense in _expenses) {
+    for (final expense in allExpenses) {
       expense.amountPaid = Money.zero;
     }
+    if (chosenGoal != null) save(chosenGoal!, actualSavings);
     services.database.save();
     stopEditing();
     notifyListeners();
@@ -115,5 +129,12 @@ class Budget extends DataModel {
     await services.database.import();
     notifyListeners();
     await init();
+  }
+
+  void trackGoal(SavingsGoal goal) {
+    services.settings.goalIndex = savingsGoals.indexOf(goal);
+    services.settings.save();
+    stopEditing();
+    notifyListeners();
   }
 }

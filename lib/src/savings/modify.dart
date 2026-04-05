@@ -48,10 +48,16 @@ class SavingsEditViewModel extends ViewModel {
   }
 
   Future<void> save() async {
-    final goal = parse();
-    if (goal == null) return;
-    services.database.goals.add(goal);
+    if (editing != null) {
+      editing!.name = nameController.text;
+      editing!.goal = isLimited ? Money.tryParse(goalController.text)! : null;
+    } else {
+      final goal = parse();
+      if (goal == null) return;
+      services.database.goals.add(goal);
+    }
     await services.database.save();
+    models.budget.stopEditing();
     router.pop();
   }
 }

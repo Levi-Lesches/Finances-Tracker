@@ -49,7 +49,7 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
         LinearProgressIndicator(value: model.actualExpenses / model.estimatedExpenses),
       const SizedBox(height: 12),
       if (model.isEditing) ...[
-        for (final expense in model.budgetBreakdown.keys)
+        for (final expense in model.allExpenses)
           ListTile(
             title: Text(expense.name),
             subtitle: Text(expense.amount.format()),
@@ -58,7 +58,6 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
               icon: const Icon(Icons.edit),
             ),
           ),
-        const Divider(),
         ListTile(
           title: const Text("Add new expense"),
           trailing: IconButton(
@@ -66,6 +65,7 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
             icon: const Icon(Icons.add),
           ),
         ),
+        const Divider(),
         FilledButton(onPressed: model.rollover, child: const Text("Rollover")),
       ] else
         GridView.count(
@@ -74,8 +74,12 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
           physics: const NeverScrollableScrollPhysics(),
           childAspectRatio: 1.75,
           children: [
-            for (final (expense, amount) in model.budgetBreakdown.records)
-              ExpenseCard(expense: expense, currentSpending: amount, makePayment: model.pay),
+            for (final expense in model.allExpenses)
+              ExpenseCard(
+                expense: expense,
+                currentSpending: expense.amountPaid,
+                makePayment: model.pay,
+              ),
           ],
         ),
     ],

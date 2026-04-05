@@ -2,8 +2,8 @@ import "money.dart";
 import "utils.dart";
 
 class SavingsGoal {
-  final String name;
-  final Money? goal;
+  String name;
+  Money? goal;
   SavingsGoal({required this.name, required this.goal});
 
   Money progress = Money.zero;
@@ -24,9 +24,11 @@ class SavingsGoal {
     }
   }
 
-  SavingsGoal.fromJson(Json json) : name = json["name"], goal = Money.fromJson(json["goal"]);
+  SavingsGoal.fromJson(Json json) : name = json["name"], goal = json.maybe("goal", Money.fromJson);
 
   double get progressPercent => goal == null ? 0 : (progress / goal!);
+
+  bool get isComplete => goal != null && progress == goal;
 
   Json toJson() => {"name": name, "goal": goal};
 }

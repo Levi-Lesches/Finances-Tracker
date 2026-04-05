@@ -1,3 +1,4 @@
+import "package:finances/widgets.dart";
 import "package:flutter/material.dart";
 
 import "package:finances/models.dart";
@@ -21,6 +22,7 @@ class FinancesApp extends StatelessWidget {
   Widget build(BuildContext context) => ValueListenableBuilder(
     valueListenable: services.settings.theme,
     builder: (context, value, _) => MaterialApp.router(
+      scaffoldMessengerKey: scaffoldKey,
       debugShowCheckedModeBanner: false,
       title: "Flutter Demo",
       theme: ThemeData(

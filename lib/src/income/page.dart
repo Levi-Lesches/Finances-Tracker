@@ -50,7 +50,7 @@ class IncomePage extends ReusableReactiveWidget<Budget> {
                   trailing: Text(model.netAnnualIncome.format()),
                 ),
                 ListTile(
-                  title: const Text("Monthly Income"),
+                  title: const Text("Net Monthly Income"),
                   trailing: Text(model.netMonthlyIncome.format()),
                 ),
               ],

@@ -1,3 +1,5 @@
+import "package:collection/collection.dart";
+
 /// A JSON object
 typedef Json = Map<String, dynamic>;
 
@@ -35,6 +37,8 @@ extension ListUtils<E> on List<E> {
       yield (i, this[i]);
     }
   }
+
+  Iterable<E> exceptFor(E other) => whereNot((e) => e == other);
 }
 
 extension StringUtils on String {
