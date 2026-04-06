@@ -115,11 +115,15 @@ class Budget extends DataModel {
     notifyListeners();
   }
 
-  void rollover() {
+  void rollover(DateTime date) {
+    // These lines rely on [allExpenses] being accurate, must run before rolling over
+    final entry = HistoryEntry(date: date, expenses: allExpenses, wallet: wallet);
+    services.database.history.add(entry);
+    if (chosenGoal != null) save(chosenGoal!, actualSavings);
+
     for (final expense in allExpenses) {
       expense.amountPaid = Money.zero;
     }
-    if (chosenGoal != null) save(chosenGoal!, actualSavings);
     services.database.save();
     stopEditing();
     notifyListeners();

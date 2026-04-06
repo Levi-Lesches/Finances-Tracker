@@ -5,6 +5,21 @@ import "package:finances/data.dart";
 import "package:finances/services.dart";
 import "package:file_picker/file_picker.dart";
 
+class HistoryEntry {
+  final List<Expense> expenses;
+  final Money wallet;
+  final DateTime date;
+
+  HistoryEntry({required this.expenses, required this.wallet, required this.date});
+
+  HistoryEntry.fromJson(Json json)
+    : expenses = json.parseList("expenses", Expense.fromJson),
+      wallet = Money.fromJson(json["wallet"]),
+      date = DateTime.parse(json["date"]);
+
+  Json toJson() => {"expenses": expenses, "wallet": wallet, "date": date.toIso8601String()};
+}
+
 class DatabaseService extends Service {
   File get file => File("${Services.dir.path}/data.json");
   bool get needsOnboarding => !file.existsSync();
@@ -18,11 +33,15 @@ class DatabaseService extends Service {
     expenses = json.parseList("expenses", Expense.fromJson);
     wallet = Money.fromJson(json["wallet"]);
     goals = json.parseList("goals", SavingsGoal.fromJson);
+    if (json.containsKey("history")) {
+      history = json.parseList("history", HistoryEntry.fromJson);
+    }
   }
 
   late Income income;
   List<Expense> expenses = [];
   List<SavingsGoal> goals = [];
+  List<HistoryEntry> history = [];
   Money wallet = Money.zero;
 
   Future<void> save() async {
@@ -31,6 +50,7 @@ class DatabaseService extends Service {
       "expenses": expenses,
       "goals": goals,
       "wallet": wallet.toJson(),
+      "history": history,
     };
     await file.create(recursive: true);
     const encoder = JsonEncoder.withIndent("  ");

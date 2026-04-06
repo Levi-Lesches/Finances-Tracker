@@ -66,7 +66,19 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
           ),
         ),
         const Divider(),
-        FilledButton(onPressed: model.rollover, child: const Text("Rollover")),
+        FilledButton(
+          child: const Text("Rollover"),
+          onPressed: () async {
+            final date = await showDatePicker(
+              context: context,
+              firstDate: DateTime.now().subtract(const Duration(days: 365)),
+              lastDate: DateTime.now().add(const Duration(days: 365)),
+              initialDate: DateTime.now(),
+            );
+            if (date == null) return;
+            model.rollover(date);
+          },
+        ),
       ] else
         GridView.count(
           shrinkWrap: true,

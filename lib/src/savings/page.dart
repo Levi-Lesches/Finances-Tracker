@@ -61,51 +61,52 @@ class SavingsPage extends ReusableReactiveWidget<Budget> {
           ),
         ],
       ),
-    const SizedBox(height: 12),
-    const Divider(),
-    SplitRow(
-      title: "Monthly Savings",
-      subtitle: "80% after expenses",
-      left: Text(
-        "Expected savings: \n${model.estimatedSavings.format()}",
-        style: context.textTheme.titleLarge?.copyWith(height: 1.5),
-        textAlign: .center,
-      ),
-      right: Text(
-        "Savings this month: \n${model.actualSavings.format()}",
-        textAlign: .center,
-        style: context.textTheme.titleLarge?.copyWith(
-          height: 1.5,
-          color: _getSavingsColor(model.actualSavings / model.estimatedSavings),
+    if (!goal.isComplete) ...[
+      const SizedBox(height: 12),
+      const Divider(),
+      SplitRow(
+        title: "Monthly Savings",
+        subtitle: "80% after expenses",
+        left: Text(
+          "Expected savings: \n${model.estimatedSavings.format()}",
+          style: context.textTheme.titleLarge?.copyWith(height: 1.5),
+          textAlign: .center,
+        ),
+        right: Text(
+          "Savings this month: \n${model.actualSavings.format()}",
+          textAlign: .center,
+          style: context.textTheme.titleLarge?.copyWith(
+            height: 1.5,
+            color: _getSavingsColor(model.actualSavings / model.estimatedSavings),
+          ),
         ),
       ),
-    ),
+      const SizedBox(height: 12),
+      const Divider(),
+      SplitRow(
+        title: "Make a deposit",
+        left: InkCard(
+          title: "Deposit Amount",
+          subtitle: "Enter an amount to save",
+          onTap: () async {
+            final amount = await showMoneyDialog(context);
+            if (amount == null) return;
+            model.save(goal, amount);
+          },
+        ),
+        right: InkCard(
+          title: "Leave me with",
+          subtitle: "Saves the remainder",
+          onTap: () async {
+            final amount = await showMoneyDialog(context);
+            if (amount == null) return;
+            model.save(goal, model.wallet - amount);
+          },
+        ),
+      ),
+    ],
     const SizedBox(height: 12),
     const Divider(),
-    SplitRow(
-      title: "Make a deposit",
-      left: InkCard(
-        title: "Deposit Amount",
-        subtitle: "Enter an amount to save",
-        onTap: () async {
-          final amount = await showMoneyDialog(context);
-          if (amount == null) return;
-          model.save(goal, amount);
-        },
-      ),
-      right: InkCard(
-        title: "Leave me with",
-        subtitle: "Saves the remainder",
-        onTap: () async {
-          final amount = await showMoneyDialog(context);
-          if (amount == null) return;
-          model.save(goal, model.wallet - amount);
-        },
-      ),
-    ),
-    const SizedBox(height: 12),
-    const Divider(),
-
     SplitRow(
       title: "Make a withdrawal",
       left: InkCard(
