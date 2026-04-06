@@ -40,7 +40,7 @@ A mobile/desktop app to help track your income, expenses, and savings goals
 
 | Income page              | Expenses page              | Savings page              |
 | ------------------------ | -------------------------- | ------------------------- |
-| ![](./images/income.png) | ![](./images/expenses.png) | ![](./images/savings.png) |
+| ![](./Images/income.png) | ![](./Images/expenses.png) | ![](./Images/savings.png) |
 
 ## Installing
 
