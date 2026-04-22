@@ -34,7 +34,7 @@ class IncomePage extends ReusableReactiveWidget<Budget> {
                 ),
                 const SizedBox(height: 12),
                 const Divider(),
-                const Text("Annual Data:"),
+                const Text("Annual Breakdown:"),
                 ListTile(
                   title: const Text("Salary"),
                   trailing: Text(model.income.annualSalary.format()),
@@ -56,7 +56,7 @@ class IncomePage extends ReusableReactiveWidget<Budget> {
                   trailing: Text(model.netAnnualIncome.format()),
                 ),
                 const Divider(),
-                const Text("Monthly Data:"),
+                const Text("Monthly Breakdown:"),
                 ListTile(
                   title: const Text("Income"),
                   trailing: Text(model.income.monthlyIncome.format()),

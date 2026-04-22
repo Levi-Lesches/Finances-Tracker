@@ -33,7 +33,8 @@ class SavingsPage extends ReusableReactiveWidget<Budget> {
             child: Column(
               children: [
                 Text("Progress:", style: context.textTheme.titleLarge),
-                const SizedBox(height: 12),
+                const SizedBox(height: 4),
+                if (goal.goal != null) Text("${goal.amountRemaining.format()} left"),
                 Text(goal.format()),
                 const SizedBox(height: 8),
                 Padding(
