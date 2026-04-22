@@ -36,6 +36,9 @@ class DatabaseService extends Service {
     if (json.containsKey("history")) {
       history = json.parseList("history", HistoryEntry.fromJson);
     }
+    if (json.containsKey("paychecks")) {
+      paychecks = Money.fromJson(json["paychecks"]);
+    }
   }
 
   late Income income;
@@ -43,6 +46,7 @@ class DatabaseService extends Service {
   List<SavingsGoal> goals = [];
   List<HistoryEntry> history = [];
   Money wallet = Money.zero;
+  Money paychecks = Money.zero;
 
   Future<void> save() async {
     final json = {
@@ -51,6 +55,7 @@ class DatabaseService extends Service {
       "goals": goals,
       "wallet": wallet.toJson(),
       "history": history,
+      "paychecks": paychecks,
     };
     await file.create(recursive: true);
     const encoder = JsonEncoder.withIndent("  ");

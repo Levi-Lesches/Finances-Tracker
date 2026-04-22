@@ -18,6 +18,7 @@ class Budget extends DataModel {
   Future<void> init() async {
     services.settings.theme.addListener(notifyListeners);
     _wallet = services.database.wallet;
+    _paychecks = services.database.paychecks;
   }
 
   @override
@@ -31,6 +32,14 @@ class Budget extends DataModel {
   set wallet(Money amount) {
     _wallet = amount;
     services.database.wallet = amount;
+    services.database.save();
+  }
+
+  Money _paychecks = Money.zero;
+  Money get paychecksRemaining => _paychecks;
+  set paychecksRemaining(Money amount) {
+    _paychecks = amount;
+    services.database.paychecks = amount;
     services.database.save();
   }
 
@@ -50,7 +59,7 @@ class Budget extends DataModel {
   Money get estimatedExpenses => allExpenses.monthlyExpenses;
   Money get actualExpenses => allExpenses.totalPaid;
   Money get remainingExpenses => allExpenses.totalRemaining;
-  Money get remainingWallet => wallet - remainingExpenses.clamp();
+  Money get remainingWallet => wallet - remainingExpenses.clamp() + paychecksRemaining;
 
   // Savings page
   Money get estimatedSavings => (income.monthlyIncome - estimatedExpenses) * 0.8;
@@ -125,6 +134,7 @@ class Budget extends DataModel {
     for (final expense in allExpenses) {
       expense.amountPaid = Money.zero;
     }
+    paychecksRemaining = income.monthlyIncome;
     services.database.save();
     stopEditing();
     notifyListeners();
@@ -141,5 +151,10 @@ class Budget extends DataModel {
     services.settings.save();
     stopEditing();
     notifyListeners();
+  }
+
+  void depositPaycheck() {
+    deposit(paycheck);
+    paychecksRemaining = (paychecksRemaining - paycheck).clamp();
   }
 }

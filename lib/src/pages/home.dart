@@ -11,7 +11,7 @@ final fabs = <Widget? Function(Budget)>[
   (Budget model) => FloatingActionButton(
     tooltip: "Add paycheck",
     child: const Icon(Icons.credit_score),
-    onPressed: () => model.deposit(model.paycheck),
+    onPressed: () => model.depositPaycheck(),
   ),
   (Budget model) => null,
   (Budget model) => null,
