@@ -54,6 +54,7 @@ class Budget extends DataModel {
 
   // Savings page
   Money get estimatedSavings => (income.monthlyIncome - estimatedExpenses) * 0.8;
+  Money get disposableIncome => (income.monthlyIncome - estimatedExpenses) * 0.2;
   Money get actualSavings => ((income.monthlyIncome - actualExpenses) * 0.8).clamp();
 
   void deposit(Money amount) {
