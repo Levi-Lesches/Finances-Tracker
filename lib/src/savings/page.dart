@@ -52,10 +52,7 @@ class SavingsPage extends ReusableReactiveWidget<Budget> {
               children: [
                 Text("Time to save:", style: context.textTheme.titleLarge),
                 const SizedBox(height: 8),
-                Text(
-                  "${model.estimateMonthsForGoal(goal).ceil()} month(s)",
-                  style: context.textTheme.titleLarge,
-                ),
+                Text(timeToSaveText(model, goal), style: context.textTheme.titleLarge),
               ],
             ),
           ),
@@ -145,6 +142,24 @@ class SavingsPage extends ReusableReactiveWidget<Budget> {
       ),
     ),
   ];
+
+  String timeToSaveText(Budget model, SavingsGoal goal) {
+    var numMonths = model.estimateMonthsForGoal(goal).ceil();
+    if (numMonths <= 12) {
+      final months = numMonths > 1 ? "months" : "month";
+      return "$numMonths $months";
+    } else {
+      final numYears = numMonths ~/ 12;
+      final years = numYears > 1 ? "years" : "year";
+      numMonths = numMonths % 12;
+      final months = numMonths > 1 ? "months" : "month";
+      if (numMonths == 0) {
+        return "$numYears $years";
+      } else {
+        return "$numYears $years, $numMonths $months";
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context, Budget model) => ListView(
