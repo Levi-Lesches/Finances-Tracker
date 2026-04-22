@@ -31,15 +31,19 @@ class ExpenseCard extends StatelessWidget {
     onLongPress: () => tapToPay(context, isPayment: false),
     onSecondaryTap: () => tapToPay(context, isPayment: false),
     child: Card(
-      color: expense.amountPaid > expense.amount ? Colors.red.shade300 : null,
+      color: expense.amountPaid > expense.amount ? Colors.red.shade400 : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
         child: Column(
           children: [
-            Text(expense.name, style: context.textTheme.titleLarge),
+            Text(expense.name, style: context.textTheme.titleLarge?.copyWith(fontWeight: .bold)),
             const Text("Tap to pay", style: TextStyle(fontStyle: .italic)),
             const Text("Hold to un-spend", style: TextStyle(fontStyle: .italic)),
             const Spacer(),
+            const Divider(),
+            const Spacer(),
+            Text("${(expense.monthlyAmount - currentSpending).format()} left"),
+            const SizedBox(height: 2),
             Text("${currentSpending.format()} / ${expense.monthlyAmount.format()}"),
             const SizedBox(height: 4),
             LinearProgressIndicator(value: currentSpending / expense.monthlyAmount),

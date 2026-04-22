@@ -84,7 +84,7 @@ class ExpensesPage extends ReusableReactiveWidget<Budget> {
           shrinkWrap: true,
           crossAxisCount: 2,
           physics: const NeverScrollableScrollPhysics(),
-          childAspectRatio: 1.75,
+          childAspectRatio: 1.35,
           children: [
             for (final expense in model.allExpenses)
               ExpenseCard(
