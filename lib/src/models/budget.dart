@@ -115,6 +115,13 @@ class Budget extends DataModel {
     return moneyRemaining / estimatedSavings;
   }
 
+  DateTime etaForGoal(SavingsGoal goal) {
+    final months = estimateMonthsForGoal(goal);
+    final days = (30 * months).floor();
+    final duration = Duration(days: days);
+    return DateTime.now().add(duration);
+  }
+
   void overrideWallet(Money amount) {
     wallet = amount;
     notifyListeners();

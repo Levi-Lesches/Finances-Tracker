@@ -51,8 +51,13 @@ class SavingsPage extends ReusableReactiveWidget<Budget> {
             child: Column(
               children: [
                 Text("Time to save:", style: context.textTheme.titleLarge),
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 Text(timeToSaveText(model, goal), style: context.textTheme.titleLarge),
+                const SizedBox(height: 4),
+                Text(
+                  "(${context.formatDate(model.etaForGoal(goal))})",
+                  style: context.textTheme.bodySmall,
+                ),
               ],
             ),
           ),
