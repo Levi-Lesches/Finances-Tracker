@@ -52,19 +52,36 @@ class IncomePage extends ReusableReactiveWidget<Budget> {
                   trailing: Text(model.annualExpenses.format()),
                 ),
                 ListTile(
-                  title: const Text("Savings"),
+                  title: const Text("Remainder"),
                   trailing: Text(model.netAnnualIncome.format()),
+                ),
+                ListTile(
+                  title: const Text("Savings (80%)"),
+                  trailing: Text(model.annualSavings.format()),
+                ),
+                ListTile(
+                  title: const Text("Disposable Income (20%)"),
+                  trailing: Text(model.annualDisposableIncome.format()),
                 ),
                 const Divider(),
                 const Text("Monthly Breakdown:"),
                 ListTile(
-                  title: const Text("Income"),
+                  title: const Text("Income (before taxes)"),
+                  trailing: Text(model.income.grossMonthlyIncome.format()),
+                ),
+                ListTile(
+                  title: const Text("Income (after taxes)"),
                   trailing: Text(model.income.monthlyIncome.format()),
                 ),
                 ListTile(
                   title: const Text("Expenses"),
                   trailing: Text(model.estimatedExpenses.format()),
                 ),
+                ListTile(
+                  title: const Text("Remainder"),
+                  trailing: Text(model.netMonthlyIncome.format()),
+                ),
+
                 ListTile(
                   title: const Text("Savings (80%)"),
                   trailing: Text(model.estimatedSavings.format()),

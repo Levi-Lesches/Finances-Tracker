@@ -150,10 +150,14 @@ class SavingsPage extends ReusableReactiveWidget<Budget> {
   ];
 
   String timeToSaveText(Budget model, SavingsGoal goal) {
-    var numMonths = model.estimateMonthsForGoal(goal).ceil();
-    if (numMonths <= 12) {
+    var numMonths = model.estimateMonthsForGoal(goal);
+    if (numMonths < 1) {
+      final numDays = (numMonths * 30).ceil();
+      final days = numDays > 1 ? "days" : "day";
+      return "$numDays $days";
+    } else if (numMonths <= 12) {
       final months = numMonths > 1 ? "months" : "month";
-      return "$numMonths $months";
+      return "${numMonths.ceil()} $months";
     } else {
       final numYears = numMonths ~/ 12;
       final years = numYears > 1 ? "years" : "year";
@@ -162,7 +166,7 @@ class SavingsPage extends ReusableReactiveWidget<Budget> {
       if (numMonths == 0) {
         return "$numYears $years";
       } else {
-        return "$numYears $years, $numMonths $months";
+        return "$numYears $years, ${numMonths.ceil()} $months";
       }
     }
   }

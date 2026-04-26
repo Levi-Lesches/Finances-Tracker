@@ -54,6 +54,8 @@ class Budget extends DataModel {
   Money get annualExpenses => allExpenses.annualExpenses;
   Money get netAnnualIncome => income.annualIncome - annualExpenses;
   Money get netMonthlyIncome => netAnnualIncome.divide(12);
+  Money get annualSavings => netAnnualIncome * 0.8;
+  Money get annualDisposableIncome => netAnnualIncome * 0.2;
 
   // Expenses page
   Money get estimatedExpenses => allExpenses.monthlyExpenses;

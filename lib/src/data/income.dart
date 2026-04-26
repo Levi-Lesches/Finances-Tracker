@@ -5,15 +5,12 @@ class Income {
   final Money annualSalary;
   final Money paycheck;
   final DateTime firstPayDay;
-  Income({
-    required this.annualSalary,
-    required this.paycheck,
-    required this.firstPayDay,
-  });
+  Income({required this.annualSalary, required this.paycheck, required this.firstPayDay});
 
   Money get annualTaxes => annualSalary - (paycheck * 26);
   Money get annualIncome => paycheck * 26;
   Money get monthlyIncome => annualIncome.divide(12);
+  Money get grossMonthlyIncome => annualSalary.divide(12);
 
   Json toJson() => {
     "annualSalary": annualSalary.toJson(),
@@ -21,10 +18,10 @@ class Income {
     "firstPayDay": firstPayDay.toIso8601String(),
   };
 
-  Income.fromJson(Json json) :
-    annualSalary = Money.fromJson(json["annualSalary"]),
-    paycheck = Money.fromJson(json["paycheck"]),
-    firstPayDay = DateTime.parse(json["firstPayDay"]);
+  Income.fromJson(Json json)
+    : annualSalary = Money.fromJson(json["annualSalary"]),
+      paycheck = Money.fromJson(json["paycheck"]),
+      firstPayDay = DateTime.parse(json["firstPayDay"]);
 
   DateTime get nextPayday {
     final now = DateTime.now();
