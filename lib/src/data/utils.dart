@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:collection/collection.dart";
 
 /// A JSON object
@@ -43,4 +45,8 @@ extension ListUtils<E> on List<E> {
 
 extension StringUtils on String {
   String? get nullIfEmpty => trim().isEmpty ? null : trim();
+}
+
+extension DirUtils on Directory {
+  String operator /(String other) => "$path/$other";
 }

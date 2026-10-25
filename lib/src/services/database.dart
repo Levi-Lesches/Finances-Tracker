@@ -21,27 +21,38 @@ class HistoryEntry {
 }
 
 class DatabaseService extends Service {
-  File get file => File("${Services.dir.path}/data.json");
+  File get file => File(Services.dir / "data.json");
+  File get backupFile => File(Services.downloadsDir / "finances_failed_backup.json");
+
   bool get needsOnboarding => !file.existsSync();
 
   @override
   Future<void> init() async {
+    hasError = false;
     if (needsOnboarding) return;
     final jsonString = await file.readAsString();
-    final json = jsonDecode(jsonString) as Json;
-    income = Income.fromJson(json["income"]);
-    expenses = json.parseList("expenses", Expense.fromJson);
-    wallet = Money.fromJson(json["wallet"]);
-    goals = json.parseList("goals", SavingsGoal.fromJson);
-    if (json.containsKey("history")) {
-      history = json.parseList("history", HistoryEntry.fromJson);
-    }
-    if (json.containsKey("paychecks")) {
-      paychecks = Money.fromJson(json["paychecks"]);
+    try {
+      final json = jsonDecode(jsonString) as Json;
+      income = Income.fromJson(json["income"]);
+      expenses = json.parseList("expenses", Expense.fromJson);
+      wallet = Money.fromJson(json["wallet"]);
+      goals = json.parseList("goals", SavingsGoal.fromJson);
+      if (json.containsKey("history")) {
+        history = json.parseList("history", HistoryEntry.fromJson);
+      }
+      if (json.containsKey("paychecks")) {
+        paychecks = Money.fromJson(json["paychecks"]);
+      }
+    } catch (error) {
+      await backupFile.writeAsString(jsonString);
+      await file.delete();
+      hasError = true;
+      print("ERROR");
     }
   }
 
   late Income income;
+  bool hasError = false;
   List<Expense> expenses = [];
   List<SavingsGoal> goals = [];
   List<HistoryEntry> history = [];

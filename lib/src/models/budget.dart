@@ -14,11 +14,21 @@ class Budget extends DataModel {
     return savingsGoals[index];
   }
 
+  void _checkError() {
+    if (services.database.hasError) {
+      Future.delayed(
+        const Duration(seconds: 1),
+        () => showSnackBar("Could not import -- backed up to Downloads folder"),
+      );
+    }
+  }
+
   @override
   Future<void> init() async {
     services.settings.theme.addListener(notifyListeners);
     _wallet = services.database.wallet;
     _paychecks = services.database.paychecks;
+    _checkError();
   }
 
   @override
@@ -151,6 +161,9 @@ class Budget extends DataModel {
 
   Future<void> import() async {
     await services.database.import();
+    if (services.database.hasError) {
+      return _checkError();
+    }
     notifyListeners();
     await init();
   }

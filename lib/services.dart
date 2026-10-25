@@ -23,10 +23,12 @@ class Services extends Service {
   /// The different services to initialize, in this order.
   List<Service> get services => [database, settings];
   static late Directory dir;
+  static late Directory downloadsDir;
 
   @override
   Future<void> init() async {
     dir = await getApplicationSupportDirectory();
+    downloadsDir = Directory("/storage/emulated/0/Download");
     for (final service in services) {
       await service.init();
     }
