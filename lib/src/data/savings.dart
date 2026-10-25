@@ -24,11 +24,14 @@ class SavingsGoal {
     }
   }
 
-  SavingsGoal.fromJson(Json json) : name = json["name"], goal = json.maybe("goal", Money.fromJson);
+  SavingsGoal.fromJson(Json json)
+    : name = json["name"],
+      goal = json.maybe("goal", Money.fromJson),
+      progress = json.maybe("progress", Money.fromJson) ?? Money.zero;
 
   double get progressPercent => goal == null ? 0 : (progress / goal!);
 
   bool get isComplete => goal != null && progress == goal;
 
-  Json toJson() => {"name": name, "goal": goal};
+  Json toJson() => {"name": name, "goal": goal, "progress": progress.toJson()};
 }

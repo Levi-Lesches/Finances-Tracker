@@ -95,10 +95,10 @@ class Budget extends DataModel {
     if (amount.isNegative || amount > wallet) {
       return showSnackBar("Not enough money in the wallet to save ${amount.format()}");
     }
-    wallet -= amount;
     final leftover = goal.save(amount);
     final actualSaved = amount - leftover;
-    wallet += leftover;
+    wallet -= amount;
+    if (leftover > Money.zero) wallet += leftover;
     showSnackBar("Saved ${actualSaved.format()} for ${goal.name}");
     notifyListeners();
   }

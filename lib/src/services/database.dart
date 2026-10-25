@@ -4,6 +4,7 @@ import "dart:io";
 import "package:finances/data.dart";
 import "package:finances/services.dart";
 import "package:file_picker/file_picker.dart";
+import "package:flutter/foundation.dart";
 
 class HistoryEntry {
   final List<Expense> expenses;
@@ -44,10 +45,10 @@ class DatabaseService extends Service {
         paychecks = Money.fromJson(json["paychecks"]);
       }
     } catch (error) {
+      if (kDebugMode) rethrow;
       await backupFile.writeAsString(jsonString);
       await file.delete();
       hasError = true;
-      print("ERROR");
     }
   }
 
